@@ -1,0 +1,45 @@
+.container {
+
+  .main {
+    padding: 120px 20px; /* Adiciona espaçamento superior para evitar sobreposição */
+    text-align: center;
+
+    .products {
+      display: flex;
+      flex-wrap: wrap; /* Permite que os produtos se ajustem em telas menores */
+      justify-content: center;
+      gap: 20px;
+      margin-top: 20px;
+
+      .product {
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+        width: 150px;
+        text-align: center;
+
+        @media (max-width: 600px) {
+          width: 100%; /* Produtos ocupam toda a largura em telas menores */
+        }
+      }
+    }
+  }
+
+  @media (max-width: 768px) {
+    .header {
+      .nav {
+        flex-direction: column; /* Links empilhados em telas menores */
+        gap: 5px;
+
+        .nav-link {
+          flex: none;
+          width: 100%; /* Links ocupam toda a largura do nav */
+        }
+      }
+    }
+
+    .main {
+      padding: 150px 10px; /* Ajusta o espaçamento para telas menores */
+    }
+  }
+}

@@ -4,13 +4,16 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import { Router } from './Router.jsx'
 import { BrowserRouter } from 'react-router-dom'
+import { ChakraProvider } from '@chakra-ui/react'
 
 function App() {
 
   return (
-    <BrowserRouter>
-      <Router />
-    </BrowserRouter>
+    <ChakraProvider resetCSS={false}>
+      <BrowserRouter>
+        <Router />
+      </BrowserRouter>
+    </ChakraProvider>
   )
 }
 

@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 import {
     Box,
     Button,
-    Checkbox,
     Container,
     FormControl,
     FormLabel,
     Heading,
-    HStack,
     Input,
     Link,
     Stack,
@@ -19,10 +18,9 @@ import {
     InputGroup,
 } from '@chakra-ui/react';
 import { HiEye, HiEyeOff } from 'react-icons/hi';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Cadaster = () => {
     const { isOpen, onToggle } = useDisclosure();
     const navigate = useNavigate();
 
@@ -32,44 +30,57 @@ const Login = () => {
     const [passwordError, setPasswordError] = useState('');
     const [error, setError] = useState('');
 
+
     const onClickReveal = () => {
         onToggle();
     };
 
-    const handleLogin = async () => {
+    const isEmailValid = (email) => {
+        // Regex for email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const handleSignUp = async () => {
+
         // Reset errors
+        setError('');
         setEmailError('');
         setPasswordError('');
 
+
         if (!email) {
-            setEmailError('Por favor, preencha seu email.');
+            setEmailError('Email é obrigatório.');
+            return;
+        }
+
+        if (!isEmailValid(email)) {
+            setEmailError('Formato de email inválido.');
             return;
         }
 
         if (!password) {
-            setPasswordError('Por favor, preencha sua senha.');
+            setPasswordError('Senha é obrigatória.');
             return;
         }
 
         try {
-            // Envia a requisição para a rota de login
-            const response = await axios.post('http://localhost:3000/api/usuarios/login', {
+
+            const response = await axios.post('http://localhost:3000/api/usuarios/registrar', {
                 email,
                 password,
             });
 
-            const { token } = response.data;
 
-            // Armazenando o token no localStorage
-            localStorage.setItem('authEmail', email);
-            localStorage.setItem('authToken', token);
-
-            // Redirecionando para a página principal ou outra página após login
-            navigate('/');
-
+            if (response.status === 201) {
+                navigate('/login');
+            }
         } catch (err) {
-            setError('Erro ao fazer login. Verifique suas credenciais.');
+
+            setError('Erro ao cadastrar. Tente novamente mais tarde.');
+            console.error(err);
         }
+
     };
 
     return (
@@ -99,10 +110,10 @@ const Login = () => {
                                 md: 'sm',
                             }}
                         >
-                            Entre na sua conta
+                            Crie sua conta aqui!
                         </Heading>
                         <Text color="fg.muted">
-                            Não tem uma conta? <Link href="./cadaster">Clique aqui</Link>
+                            Já tem uma conta? <Link href="./Login">Clique aqui</Link>
                         </Text>
                     </Stack>
                 </Stack>
@@ -148,9 +159,9 @@ const Login = () => {
                                 <InputGroup>
                                     <InputRightElement>
                                         <IconButton
+                                            variant="text"
                                             backgroundColor={'white'}
                                             size={2}
-                                            variant="text"
                                             aria-label={isOpen ? 'Mask password' : 'Reveal password'}
                                             icon={isOpen ? <HiEyeOff /> : <HiEye />}
                                             onClick={onClickReveal}
@@ -172,17 +183,15 @@ const Login = () => {
                                 <FormErrorMessage>{passwordError}</FormErrorMessage>
                             </FormControl>
                         </Stack>
-                        <HStack justify="space-between">
-                            <Checkbox defaultChecked>Lembre-me</Checkbox>
-                            <Button variant="text" backgroundColor={'white'} size="sm">
-                                Esqueceu sua senha?
-                            </Button>
-                        </HStack>
                         <Stack spacing="6">
-                            <Button backgroundColor={'#00923F'} type="submit" color={'white'} onClick={handleLogin}>
-                                Entrar
+                            <Button backgroundColor={'#00923F'} color={'white'} onClick={handleSignUp}>
+                                Cadastrar
                             </Button>
-                            {error && <Text color="red.500">{error}</Text>}
+                            {error && (
+                                <Text color="red.500" textAlign="center">
+                                    {error}
+                                </Text>
+                            )}
                         </Stack>
                     </Stack>
                 </Box>
@@ -191,4 +200,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Cadaster

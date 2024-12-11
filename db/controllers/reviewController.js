@@ -11,7 +11,7 @@ export const reviewValidations = [
         .isString().withMessage('O comentário deve ser uma string.'),
 ];
 
-// Criar uma avaliação
+
 export const createReview = async (req, res) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -19,7 +19,7 @@ export const createReview = async (req, res) => {
     }
 
     const { book, rating, comment } = req.body;
-    const userId = req.user.id; // Obtido do middleware de autenticação
+    const userId = req.user.id;
 
     try {
         // Verificar se o livro existe

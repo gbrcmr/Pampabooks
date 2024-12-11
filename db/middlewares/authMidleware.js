@@ -1,18 +1,20 @@
 import jwt from 'jsonwebtoken';
 
 export const authenticateToken = (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
+
+    const token = req.header('Authorization')?.replace('Bearer ', '');
 
     if (!token) {
-        return res.status(401).json({ error: 'Acesso negado. Token não fornecido.' });
+        return res.status(401).json({ message: 'Acesso não autorizado. Token ausente.' });
     }
 
     try {
-        const decoded = jwt.verify(token, 'secreta_key'); // Substitua 'secreta_key' pela sua chave secreta real
-        req.user = decoded; // Adiciona as informações do usuário ao objeto req
+        const decoded = jwt.verify(token, 'secret_key');
+
+        req.user = { _id: decoded._id, email: decoded.email };
+
         next();
     } catch (err) {
-        res.status(403).json({ error: 'Token inválido', err });
+        return res.status(401).json({ message: 'Token inválido.' });
     }
 };

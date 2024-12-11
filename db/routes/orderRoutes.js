@@ -1,12 +1,10 @@
-import express from 'express';
-import { createOrder, getUserOrders, authenticateToken } from '../controllers/orderController.js';
+import { Router } from 'express';
+import { createOrder, viewOrders } from '../controllers/orderController.js';
 
-const router = express.Router();
+const router = Router();
 
-// Rota para criar um pedido
-router.post('/orders/create', authenticateToken, createOrder);
+router.post('/order/create', createOrder);
 
-// Rota para listar pedidos do usuário
-router.get('/orders/list', authenticateToken, getUserOrders);
+router.get('/order/view/:email', viewOrders);
 
 export default router;

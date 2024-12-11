@@ -13,7 +13,7 @@ export const createServer = async () => {
     }));
 
     // Conectar ao MongoDB
-    const mongoURI = 'mongodb://localhost:27017/meu-banco';
+    const mongoURI = 'mongodb://127.0.0.1:27017/meu-banco';
     try {
         await connect(mongoURI);
         console.log('Conectado ao MongoDB');
